@@ -31,8 +31,8 @@ int bst_search(bst *tree, int key, char **data);
 void bst_print_node(Node *node, int level);
 void bst_print_sub_tree(Node *root, WorkFunc wf, int level);
 void bst_print_tree(bst *tree);
-Node *bst_get_maximum(bst *tree);
-Node *bst_get_minimum(bst *tree);
+Node* bst_get_maximum(bst *tree);
+Node* bst_get_minimum(bst *tree);
 
 
 #endif // BST_H

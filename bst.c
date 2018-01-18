@@ -99,7 +99,7 @@ void bst_print_tree(bst *tree)
     bst_print_sub_tree(tree->root, &bst_print_node, 0);
 }
 
-Node *bst_get_maximum(bst *tree)
+Node* bst_get_maximum(bst *tree)
 {
     if(!tree || !tree->root) return NULL;
     Node *node = tree->root;
@@ -108,7 +108,7 @@ Node *bst_get_maximum(bst *tree)
     return node;
 }
 
-Node *bst_get_minimum(bst *tree)
+Node* bst_get_minimum(bst *tree)
 {
     if(!tree || !tree->root) return NULL;
     Node *node = tree->root;
@@ -121,62 +121,49 @@ int bst_remove_node(bst *tree, int key)
 {
     Node **q = &tree->root;
     Node *z = tree->root; //Node to remove
-}
-
-/*
-int delete(struct tree * search_tree, int ** item)
-{
-    struct node ** q,*z;
-
-    q=&search_tree->root;
-    z=search_tree->root;
-    //поиск удаляемого элемента
     for(;;)
     {
-        if(z == NULL) return 0;
-        else if(item == (int **)z->data) break;
-        else if(item > (int **)z->data)
-        {
-            q = &z->right;
-            z = z->right;
-        }
-        else
+        if(!z) return 0;
+        else if(key == z->key) break;
+        else if(key < z->key)
         {
             q = &z->left;
             z = z->left;
         }
+        else
+        {
+            q = &z->right;
+            z = z->right;
+        }
     }
-
-    // непосредственное удаление элемента
-    if(z->right == NULL) *q = z->left;
+    if(!z->right) *q = z->left;
     else
     {
-        struct node * y = z->right;
-        if(y->left == NULL)
+        Node *y = z->right;
+        if(!y->left)
         {
             y->left = z->left;
-            *q-y;
+            *q = y;
         }
         else
         {
-            struct node * x=y->left;
-            while(x->left != NULL)
+            Node *x = y->left;
+            while(x->left)
             {
                 y = x;
-                x = y->left;
+                x = x->left;
             }
             y->left = x->right;
             x->left = z->left;
             x->right = z->right;
-            *q=x;
+            *q = x;
         }
     }
 
-    search_tree->count --;
+    --tree->count;
     free(z);
     return 1;
 }
-*/
 
 /*
 int isBST(struct node* node)

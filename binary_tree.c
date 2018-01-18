@@ -143,25 +143,6 @@ bool binary_tree_find(BinaryTree *root, int key)
 }
 
 /*
-int lookup(struct node* node, int target)
-{
-    if (node == NULL)
-{
-    return(0);
-}
-else
-{
-        if (target == node->data) return(1);
-        else
-        {
-            if (target < node->data) return(lookup(node->left, target));
-            else return(lookup(node->right, target));
-        }
-    }
-}
-*/
-
-/*
 int sameTree(struct node* a, struct node* b)
 {
     if (a==NULL && b==NULL) return(true);

@@ -114,6 +114,9 @@ int main()
     Node *min = bst_get_minimum(tree);
     if(max && min)
         printf("MaxTreeKey = %d\nMinTreeKey = %d\n", max->key, min->key);
+    printf("\n*****Root removing****\n");
+    bst_remove_node(tree, 8);
+    bst_print_tree(tree);
     bst_destroy(tree);
     return 0;
 }
