@@ -1,12 +1,10 @@
 #ifndef TERNARY_TREE_H
 #define TERNARY_TREE_H
 
-#include <stdlib.h>
-#include <stdio.h>
-
 #define NUM_TERNARY_TREE_CHILDREN 3
 
-typedef struct Tree Tree;
+typedef struct TernaryTree TernaryTree;
+typedef void(*VisitFunction)(const char *);
 typedef enum
 {
     LEFT = 0,
@@ -14,25 +12,25 @@ typedef enum
     RIGHT = 2
 } Direction;
 
-struct Tree
+struct TernaryTree
 {
     const char *data;
-    Tree* children[NUM_TERNARY_TREE_CHILDREN];
+    TernaryTree* children[NUM_TERNARY_TREE_CHILDREN];
 };
 
 typedef struct
 {
     int priority;
-    Tree* node;
+    TernaryTree* node;
 } Frame;
 
-Tree *tree_add_node(Tree *tree, char *data, Direction dir);
-void tree_preorder(Tree *root, void(*func)(const char *));
-void tree_inorder(Tree *root, void(*func)(const char *));
-void tree_postorder(Tree *root, void(*func)(const char *));
-void tree_iterative_preorder(Tree *root, void(*func)(const char *));
-void tree_iterative_inorder(Tree *root, void(*func)(const char *));
-void tree_iterative_postorder(Tree *root, void(*func)(const char *));
-void tree_destroy(Tree *root);
+TernaryTree *ternary_tree_add_node(TernaryTree *tree, char *data, Direction dir);
+void ternary_tree_preorder(TernaryTree *root, VisitFunction wf);
+void ternary_tree_inorder(TernaryTree *root, VisitFunction wf);
+void ternary_tree_postorder(TernaryTree *root, VisitFunction wf);
+void ternary_tree_iterative_preorder(TernaryTree *root, VisitFunction wf);
+void ternary_tree_iterative_inorder(TernaryTree *root, VisitFunction wf);
+void ternary_tree_iterative_postorder(TernaryTree *root, VisitFunction wf);
+void ternary_tree_destroy(TernaryTree *root);
 
 #endif // TERNARY_TREE_H

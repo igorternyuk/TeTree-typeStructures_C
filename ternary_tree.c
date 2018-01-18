@@ -1,10 +1,13 @@
 #include "ternary_tree.h"
 #include <stdbool.h>
-#define MAX_STACK_SIZE 20
+#include <stdlib.h>
+#include <stdio.h>
 
-Tree* tree_add_node(Tree *tree, char *data, Direction dir)
+#define MAX_STACK_SIZE 1024
+
+TernaryTree* ternary_tree_add_node(TernaryTree *tree, char *data, Direction dir)
 {
-    Tree *tmp = (Tree*)malloc(sizeof(Tree));
+    TernaryTree *tmp = (TernaryTree*)malloc(sizeof(TernaryTree));
     tmp->data = data;
     for(int i = 0; i < NUM_TERNARY_TREE_CHILDREN; ++i)
         tmp->children[i] = NULL;
@@ -26,39 +29,39 @@ Tree* tree_add_node(Tree *tree, char *data, Direction dir)
     return tmp;
 }
 
-void tree_preorder(Tree *root, void(*func)(const char *))
+void ternary_tree_preorder(TernaryTree *root, VisitFunction wf)
 {
     if(root)
     {
-        func(root->data);
+        wf(root->data);
         for(int i = 0; i < NUM_TERNARY_TREE_CHILDREN;++i)
-            tree_preorder(root->children[i], func);
+            ternary_tree_preorder(root->children[i], wf);
     }
 }
 
-void tree_inorder(Tree *root, void(*func)(const char *))
+void ternary_tree_inorder(TernaryTree *root, VisitFunction wf)
 {
     if(root)
     {
-        tree_inorder(root->children[LEFT], func);
-        func(root->data);
-        tree_inorder(root->children[MIDDLE], func);
-        tree_inorder(root->children[RIGHT], func);
+        ternary_tree_inorder(root->children[LEFT], wf);
+        wf(root->data);
+        ternary_tree_inorder(root->children[MIDDLE], wf);
+        ternary_tree_inorder(root->children[RIGHT], wf);
     }
 }
 
-void tree_postorder(Tree *root, void(*func)(const char *))
+void ternary_tree_postorder(TernaryTree *root, VisitFunction wf)
 {
     if(root)
     {
         for(int i = 0; i < NUM_TERNARY_TREE_CHILDREN;++i)
-            tree_postorder(root->children[i], func);
-        func(root->data);
+            ternary_tree_postorder(root->children[i], wf);
+        wf(root->data);
     }
 }
 
 
-void tree_iterative_preorder(Tree *root, void(*func)(const char *))
+void ternary_tree_iterative_preorder(TernaryTree *root, VisitFunction wf)
 {
     Frame stack[MAX_STACK_SIZE];
     int pos = 0;
@@ -70,7 +73,7 @@ void tree_iterative_preorder(Tree *root, void(*func)(const char *))
     {
         curr_frame = &stack[pos];
         int *p = &curr_frame->priority;
-        Tree *curr_node = curr_frame->node;
+        TernaryTree *curr_node = curr_frame->node;
         switch(*p)
         {
             case 0:
@@ -80,7 +83,7 @@ void tree_iterative_preorder(Tree *root, void(*func)(const char *))
                 break;
             case 1:
                 *p = 2;
-                func(curr_node->data);
+                wf(curr_node->data);
                 break;
             case 2:
                 *p = 3;
@@ -108,7 +111,7 @@ void tree_iterative_preorder(Tree *root, void(*func)(const char *))
 }
 
 
-void tree_iterative_inorder(Tree *root, void(*func)(const char *))
+void ternary_tree_iterative_inorder(TernaryTree *root, VisitFunction wf)
 {
     Frame stack[MAX_STACK_SIZE];
     int pos = 0;
@@ -120,7 +123,7 @@ void tree_iterative_inorder(Tree *root, void(*func)(const char *))
     {
         curr_frame = &stack[pos];
         int *p = &curr_frame->priority;
-        Tree *curr_node = curr_frame->node;
+        TernaryTree *curr_node = curr_frame->node;
         switch(*p)
         {
             case 0:
@@ -136,7 +139,7 @@ void tree_iterative_inorder(Tree *root, void(*func)(const char *))
                 break;
             case 2:
                 *p = 3;
-                func(curr_node->data);
+                wf(curr_node->data);
                 break;
             case 3:
                 *p = 4;
@@ -157,9 +160,7 @@ void tree_iterative_inorder(Tree *root, void(*func)(const char *))
     }
 }
 
-
-
-void tree_iterative_postorder(Tree *root, void(*func)(const char *))
+void ternary_tree_iterative_postorder(TernaryTree *root, VisitFunction wf)
 {
     Frame stack[MAX_STACK_SIZE];
     int pos = 0;
@@ -171,7 +172,7 @@ void tree_iterative_postorder(Tree *root, void(*func)(const char *))
     {
         curr_frame = &stack[pos];
         int *p = &curr_frame->priority;
-        Tree *curr_node = curr_frame->node;
+        TernaryTree *curr_node = curr_frame->node;
         switch(*p)
         {
             case 0:
@@ -199,7 +200,7 @@ void tree_iterative_postorder(Tree *root, void(*func)(const char *))
                 break;
             case 4:
                 *p = 5;
-                func(curr_node->data);
+                wf(curr_node->data);
                 break;
             case 5:
                 --pos;
@@ -232,12 +233,12 @@ void tree_iterative_postorder(Tree *root, void(*func)(const char *))
     }
 }*/
 
-void tree_destroy(Tree *root)
+void ternary_tree_destroy(TernaryTree *root)
 {
     for(int i = 0; i < NUM_TERNARY_TREE_CHILDREN; ++i)
     {
         if(root->children[i])
-            tree_destroy(root->children[i]);
+            ternary_tree_destroy(root->children[i]);
     }
     printf("Destroying %s\n", root->data);
     free(root);
